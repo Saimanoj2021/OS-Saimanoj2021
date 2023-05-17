@@ -1,0 +1,101 @@
+#include <stdio.h>
+
+// Function to calculate the number of disk I/O operations for contiguous allocation
+
+int contiguousAllocation(int fileBlocks) {
+
+    int diskIO = 0;
+
+    int totalBlocks = 100;
+
+    int blockSize = 1;  // Assuming each block size is 1 unit
+
+    if (fileBlocks <= totalBlocks) {
+
+        diskIO++;  // Read the file control block (FCB)
+
+        diskIO++;  // Read the first block of the file
+
+        // Calculate the number of disk I/O operations required to read the entire file
+
+        diskIO += fileBlocks / blockSize;
+
+    }
+
+    return diskIO;
+
+}
+
+// Function to calculate the number of disk I/O operations for linked allocation
+
+int linkedAllocation(int fileBlocks) {
+
+    int diskIO = 0;
+
+    int totalBlocks = 100;
+
+    int blockSize = 1;  // Assuming each block size is 1 unit
+
+    if (fileBlocks <= totalBlocks) {
+
+        diskIO++;  // Read the file control block (FCB)
+
+        diskIO++;  // Read the first block of the file
+
+        // Calculate the number of disk I/O operations required to read the entire file
+
+        diskIO += fileBlocks;
+
+    }
+
+    return diskIO;
+
+}
+
+// Function to calculate the number of disk I/O operations for indexed (single-level) allocation
+
+int indexedAllocation(int fileBlocks) {
+
+    int diskIO = 0;
+
+    int totalBlocks = 100;
+
+    int blockSize = 1;  // Assuming each block size is 1 unit
+
+    int indexBlock = 1; // Assuming the index block is at block number 1
+
+    if (fileBlocks <= totalBlocks) {
+
+        diskIO++;  // Read the file control block (FCB)
+
+        diskIO++;  // Read the index block
+
+        // Calculate the number of disk I/O operations required to read the entire file
+
+        diskIO += 1 + (fileBlocks / blockSize);
+
+    }
+
+    return diskIO;
+
+}
+
+int main() {
+
+    int fileBlocks = 10;  // Number of blocks in the file
+
+    int contiguousIO = contiguousAllocation(fileBlocks);
+
+    int linkedIO = linkedAllocation(fileBlocks);
+
+    int indexedIO = indexedAllocation(fileBlocks);
+
+    printf("Contiguous Allocation: %d disk I/O operations\n", contiguousIO);
+
+    printf("Linked Allocation: %d disk I/O operations\n", linkedIO);
+
+    printf("Indexed Allocation: %d disk I/O operations\n", indexedIO);
+
+    return 0;
+
+}
