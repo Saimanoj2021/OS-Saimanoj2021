@@ -1,0 +1,161 @@
+#include <stdio.h>
+
+void findWaitingTime(int n, int burstTime[], int priority[], int waitingTime[])
+
+{
+
+    int i, j;
+
+    int temp, temp2;
+
+    int position;
+
+    
+
+    // Sorting the processes based on priority using selection sort
+
+    for(i = 0; i < n - 1; i++)
+
+    {
+
+        position = i;
+
+        for(j = i + 1; j < n; j++)
+
+        {
+
+            if(priority[j] < priority[position])
+
+                position = j;
+
+        }
+
+        
+
+        temp = burstTime[i];
+
+        burstTime[i] = burstTime[position];
+
+        burstTime[position] = temp;
+
+        
+
+        temp2 = priority[i];
+
+        priority[i] = priority[position];
+
+        priority[position] = temp2;
+
+    }
+
+    
+
+    waitingTime[0] = 0; // Waiting time for the first process is 0
+
+    
+
+    // Calculating waiting time for each process
+
+    for(i = 1; i < n; i++)
+
+    {
+
+        waitingTime[i] = 0;
+
+        for(j = 0; j < i; j++)
+
+            waitingTime[i] += burstTime[j];
+
+    }
+
+}
+
+void findTurnaroundTime(int n, int burstTime[], int waitingTime[], int turnaroundTime[])
+
+{
+
+    // Calculating turnaround time for each process
+
+    for(int i = 0; i < n; i++)
+
+        turnaroundTime[i] = burstTime[i] + waitingTime[i];
+
+}
+
+void findAverageTimes(int n, int burstTime[], int priority[])
+
+{
+
+    int waitingTime[n], turnaroundTime[n];
+
+    int totalWaitingTime = 0, totalTurnaroundTime = 0;
+
+    
+
+    // Find waiting time and turnaround time for each process
+
+    findWaitingTime(n, burstTime, priority, waitingTime);
+
+    findTurnaroundTime(n, burstTime, waitingTime, turnaroundTime);
+
+    
+
+    printf("Process\tBurst Time\tPriority\tWaiting Time\tTurnaround Time\n");
+
+    
+
+    // Calculate total waiting time and total turnaround time
+
+    for(int i = 0; i < n; i++)
+
+    {
+
+        totalWaitingTime += waitingTime[i];
+
+        totalTurnaroundTime += turnaroundTime[i];
+
+        
+
+        printf("P%d\t\t%d\t\t%d\t\t%d\t\t%d\n", i+1, burstTime[i], priority[i], waitingTime[i], turnaroundTime[i]);
+
+    }
+
+    
+
+    // Calculate average waiting time and average turnaround time
+
+    float avgWaitingTime = (float)totalWaitingTime / n;
+
+    float avgTurnaroundTime = (float)totalTurnaroundTime / n;
+
+    
+
+    printf("\nAverage Waiting Time: %.2f\n", avgWaitingTime);
+
+    printf("Average Turnaround Time: %.2f\n", avgTurnaroundTime);
+
+}
+
+int main()
+
+{
+
+    int n = 3; // Number of processes
+
+    
+
+    // Burst time and priority for each process
+
+    int burstTime[] = {30, 5, 12};
+
+    int priority[] = {2, 1, 3};
+
+    
+
+    findAverageTimes(n, burstTime, priority);
+
+    
+
+    return 0;
+
+}
