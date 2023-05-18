@@ -1,0 +1,91 @@
+#include <stdio.h>
+
+#include <stdbool.h>
+
+#define MAX_PARTITIONS 5
+
+#define MAX_PROCESSES 5
+
+void firstFit(int partitions[], int numPartitions, int processes[], int numProcesses)
+
+{
+
+    int allocation[MAX_PROCESSES];
+
+    // Initialize all allocations to -1 (indicating not allocated)
+
+    for (int i = 0; i < numProcesses; i++) {
+
+        allocation[i] = -1;
+
+    }
+
+    // Iterate through each process
+
+    for (int i = 0; i < numProcesses; i++) {
+
+        // Iterate through each partition
+
+        for (int j = 0; j < numPartitions; j++) {
+
+            // If the partition is larger than or equal to the process
+
+            if (partitions[j] >= processes[i]) {
+
+                // Allocate the process to the partition
+
+                allocation[i] = j;
+
+                // Reduce the partition size by the process size
+
+                partitions[j] -= processes[i];
+
+                // Break out of the loop
+
+                break;
+
+            }
+
+        }
+
+    }
+
+    // Print the allocation results
+
+    printf("Process\tProcess Size\tPartition\n");
+
+    for (int i = 0; i < numProcesses; i++) {
+
+        printf("%d\t%d KB\t\t", i + 1, processes[i]);
+
+        if (allocation[i] != -1) {
+
+            printf("%d\n", allocation[i] + 1);
+
+        } else {
+
+            printf("Not Allocated\n");
+
+        }
+
+    }
+
+}
+
+int main()
+
+{
+
+    int partitions[MAX_PARTITIONS] = {40, 10, 30, 60}; // Memory partitions in KB
+
+    int processes[MAX_PROCESSES] = {100, 50, 30, 120, 35}; // Processes sizes in KB
+
+    int numPartitions = sizeof(partitions) / sizeof(partitions[0]);
+
+    int numProcesses = sizeof(processes) / sizeof(processes[0]);
+
+    firstFit(partitions, numPartitions, processes, numProcesses);
+
+    return 0;
+
+}
